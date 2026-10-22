@@ -1,0 +1,11 @@
+review_cost,model,alerts,total_cost,pct_of_losses_avoided
+1.0,Logistic regression,347,2714.28,64.88
+1.0,Gradient boosting,682,3060.59,60.4
+2.0,Logistic regression,347,3061.28,60.39
+2.0,Gradient boosting,115,2628.79,65.99
+5.0,Logistic regression,56,3285.68,57.49
+5.0,Gradient boosting,115,2973.79,61.53
+10.0,Logistic regression,56,3565.68,53.87
+10.0,Gradient boosting,115,3548.79,54.09
+20.0,Logistic regression,56,4125.68,46.62
+20.0,Gradient boosting,72,3841.01,50.31

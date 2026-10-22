@@ -1,0 +1,5 @@
+model,pr_auc,roc_auc,recall_top_0.1pct,recall_top_0.5pct,alerts,frauds_caught,frauds_total,precision,fraud_value_stopped,total_cost,saving_vs_no_model
+Isolation forest (no labels),0.051,0.9542,0.0133,0.2667,995,44,75,0.0442,4311.66,8392.6,-663.34
+Logistic regression,0.7478,0.9833,0.6933,0.8533,56,52,75,0.9286,4723.58,3285.68,4443.58
+Gradient boosting,0.7855,0.9795,0.7067,0.8133,115,59,75,0.513,5330.47,2973.79,4755.47
+No model (refund every fraud),,,,,0,0,75,,0.0,7729.26,0.0

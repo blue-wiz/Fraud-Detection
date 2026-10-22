@@ -1,0 +1,188 @@
+{
+  "rows": 284807,
+  "frauds": 492,
+  "fraud_rate": 0.001727485630620034,
+  "split": {
+    "train": {
+      "rows": 170888,
+      "frauds": 360
+    },
+    "valid": {
+      "rows": 56957,
+      "frauds": 57
+    },
+    "test": {
+      "rows": 56962,
+      "frauds": 75
+    }
+  },
+  "review_cost_eur": 5.0,
+  "results": [
+    {
+      "model": "Isolation forest (no labels)",
+      "pr_auc": 0.051,
+      "roc_auc": 0.9542,
+      "recall_top_0.1pct": 0.0133,
+      "recall_top_0.5pct": 0.2667,
+      "alerts": 995,
+      "frauds_caught": 44,
+      "frauds_total": 75,
+      "precision": 0.0442,
+      "fraud_value_stopped": 4311.66,
+      "total_cost": 8392.6,
+      "saving_vs_no_model": -663.34
+    },
+    {
+      "model": "Logistic regression",
+      "pr_auc": 0.7478,
+      "roc_auc": 0.9833,
+      "recall_top_0.1pct": 0.6933,
+      "recall_top_0.5pct": 0.8533,
+      "alerts": 56,
+      "frauds_caught": 52,
+      "frauds_total": 75,
+      "precision": 0.9286,
+      "fraud_value_stopped": 4723.58,
+      "total_cost": 3285.68,
+      "saving_vs_no_model": 4443.58
+    },
+    {
+      "model": "Gradient boosting",
+      "pr_auc": 0.7855,
+      "roc_auc": 0.9795,
+      "recall_top_0.1pct": 0.7067,
+      "recall_top_0.5pct": 0.8133,
+      "alerts": 115,
+      "frauds_caught": 59,
+      "frauds_total": 75,
+      "precision": 0.513,
+      "fraud_value_stopped": 5330.47,
+      "total_cost": 2973.79,
+      "saving_vs_no_model": 4755.47
+    },
+    {
+      "model": "No model (refund every fraud)",
+      "pr_auc": NaN,
+      "roc_auc": NaN,
+      "recall_top_0.1pct": NaN,
+      "recall_top_0.5pct": NaN,
+      "alerts": 0,
+      "frauds_caught": 0,
+      "frauds_total": 75,
+      "precision": NaN,
+      "fraud_value_stopped": 0.0,
+      "total_cost": 7729.26,
+      "saving_vs_no_model": 0.0
+    }
+  ],
+  "top_features": {
+    "V14": 0.2082,
+    "V12": 0.0621,
+    "V10": 0.0612,
+    "V16": 0.0215,
+    "V28": 0.01,
+    "V20": 0.0095,
+    "V4": 0.0094,
+    "V7": 0.0074,
+    "V5": 0.0017,
+    "V8": 0.0016
+  },
+  "bootstrap": {
+    "Isolation forest (no labels)": {
+      "saving": -825.2699999999986,
+      "low": -3670.83625,
+      "high": 3524.463249999995,
+      "pct_of_losses_avoided": -8.582192861929864
+    },
+    "Logistic regression": {
+      "saving": 4244.115000000002,
+      "low": 1375.01725,
+      "high": 8778.104249999999,
+      "pct_of_losses_avoided": 57.49036777130023
+    },
+    "Gradient boosting": {
+      "saving": 4627.675000000001,
+      "low": 1664.0272499999994,
+      "high": 9085.338,
+      "pct_of_losses_avoided": 61.525553545876335
+    },
+    "boosting_minus_logistic": {
+      "median": 265.9849999999997,
+      "low": -256.14499999999987,
+      "high": 1098.7389999999998
+    }
+  },
+  "review_cost_sensitivity": [
+    {
+      "review_cost": 1.0,
+      "model": "Logistic regression",
+      "alerts": 347,
+      "total_cost": 2714.28,
+      "pct_of_losses_avoided": 64.883
+    },
+    {
+      "review_cost": 1.0,
+      "model": "Gradient boosting",
+      "alerts": 682,
+      "total_cost": 3060.59,
+      "pct_of_losses_avoided": 60.403
+    },
+    {
+      "review_cost": 2.0,
+      "model": "Logistic regression",
+      "alerts": 347,
+      "total_cost": 3061.28,
+      "pct_of_losses_avoided": 60.394
+    },
+    {
+      "review_cost": 2.0,
+      "model": "Gradient boosting",
+      "alerts": 115,
+      "total_cost": 2628.79,
+      "pct_of_losses_avoided": 65.989
+    },
+    {
+      "review_cost": 5.0,
+      "model": "Logistic regression",
+      "alerts": 56,
+      "total_cost": 3285.68,
+      "pct_of_losses_avoided": 57.49
+    },
+    {
+      "review_cost": 5.0,
+      "model": "Gradient boosting",
+      "alerts": 115,
+      "total_cost": 2973.79,
+      "pct_of_losses_avoided": 61.526
+    },
+    {
+      "review_cost": 10.0,
+      "model": "Logistic regression",
+      "alerts": 56,
+      "total_cost": 3565.68,
+      "pct_of_losses_avoided": 53.868
+    },
+    {
+      "review_cost": 10.0,
+      "model": "Gradient boosting",
+      "alerts": 115,
+      "total_cost": 3548.79,
+      "pct_of_losses_avoided": 54.086
+    },
+    {
+      "review_cost": 20.0,
+      "model": "Logistic regression",
+      "alerts": 56,
+      "total_cost": 4125.68,
+      "pct_of_losses_avoided": 46.623
+    },
+    {
+      "review_cost": 20.0,
+      "model": "Gradient boosting",
+      "alerts": 72,
+      "total_cost": 3841.01,
+      "pct_of_losses_avoided": 50.306
+    }
+  ],
+  "no_model_cost": 7729.26
+}
