@@ -55,26 +55,37 @@ fig, ax = plt.subplots(figsize=(6.4, 4.6))
 for (name, s), col in zip(scores_test.items(), [GREY, TERRA, TEAL]):
     c = pr_curve(test.Class, s)
     ap = res.set_index("model").loc[name, "pr_auc"]
-    ax.plot(c.recall, c.precision, color=col, lw=2, label=f"{name} (PR-AUC {ap:.2f})")
+    ax.step(c.recall, c.precision, where="post", color=col, lw=2, label=f"{name} (PR-AUC {ap:.2f})")
 ax.axhline(test.Class.mean(), color="k", lw=0.8, ls=":", label=f"Random ({test.Class.mean():.2%} fraud)")
 ax.set_xlabel("Recall (share of frauds caught)"); ax.set_ylabel("Precision (share of alerts that are fraud)")
 ax.set_title("Precision-recall on the latest 20% of transactions"); ax.legend(frameon=False, fontsize=8.5)
 fig.tight_layout(); fig.savefig(FIG / "pr_curves.png", dpi=160); plt.close(fig)
 
-# ---- Figure 2: total cost vs alert threshold (gradient boosting, test data)
-s = scores_test[best]
-qs = np.linspace(0.95, 0.99999, 300); thr = np.quantile(s, qs)
-costs = [cost(test.Class, test.Amount, s >= t) for t in thr]
-alerts = [(s >= t).sum() for t in thr]
-fig, ax = plt.subplots(figsize=(7, 4))
-ax.plot(alerts, np.array(costs) / 1e3, color=NAVY, lw=2)
-ax.axhline(no_model / 1e3, color=TERRA, ls="--", lw=1.2, label=f"No model: €{no_model/1e3:,.1f}k of fraud refunded")
-chosen = res.set_index("model").loc[best]
-ax.plot(chosen.alerts, chosen.total_cost / 1e3, "o", color=TEAL, ms=9,
-        label=f"Threshold chosen on validation: {int(chosen.alerts)} alerts, €{chosen.total_cost/1e3:,.1f}k")
-ax.set_xscale("log"); ax.set_xlabel("Number of transactions flagged for review (log scale)")
-ax.set_ylabel("Total cost (€ thousands)"); ax.set_title(f"Fraud losses + review costs (€{REVIEW_COST:.0f} per review)")
-ax.legend(frameon=False, fontsize=8.5); ax.set_ylim(0)
+# ---- Figure 2: total cost as the number of alerts grows (test data, both supervised models)
+# Cost is computed exactly for every k (review the k highest-scored transactions), so the curve
+# has no threshold-grid artefacts.
+K = 400
+y_t, a_t = test.Class.to_numpy(), test.Amount.to_numpy()
+fig, ax = plt.subplots(figsize=(7.4, 4.2))
+for name, col in [("Logistic regression", TERRA), ("Gradient boosting", TEAL)]:
+    o = np.argsort(-scores_test[name])
+    stopped = np.cumsum(np.where(y_t[o] == 1, a_t[o], 0.0))[:K]
+    k = np.arange(1, K + 1)
+    curve = (no_model - stopped + REVIEW_COST * k) / 1e3
+    ax.plot(k, curve, color=col, lw=2, label=name)
+    ch = res.set_index("model").loc[name]
+    ax.plot(ch.alerts, ch.total_cost / 1e3, "o", color=col, ms=8, mec="white", mew=1.5)
+ax.axhline(no_model / 1e3, color=GREY, ls="--", lw=1.2)
+ax.text(K, no_model / 1e3 + 0.12, f"No model: \u20ac{no_model/1e3:,.1f}k of fraud refunded", ha="right", va="bottom", fontsize=8.5, color=GREY)
+ax.text(K, 0.35, "Dots: threshold chosen on the validation period.\n"
+        "Steps down: a fraud is caught (big steps = big frauds). Rising line: each extra alert costs \u20ac5.\n"
+        "Logistic regression's first ~20 alerts are mostly \u20ac1 'card-testing' frauds, so its cost barely moves at first.",
+        ha="right", va="bottom", fontsize=7.6, color=GREY)
+ax.set_xlim(0, K); ax.set_ylim(0, no_model / 1e3 * 1.18)
+ax.set_xlabel("Number of transactions flagged for review (riskiest first)")
+ax.set_ylabel("Fraud losses + review costs (\u20ac thousands)")
+ax.set_title(f"Total cost on the test period (\u20ac{REVIEW_COST:.0f} per review)")
+ax.legend(frameon=False, fontsize=8.5, loc="center right")
 fig.tight_layout(); fig.savefig(FIG / "cost_curve.png", dpi=160); plt.close(fig)
 
 # ---- Figure 3: frauds caught by review budget

@@ -52,4 +52,5 @@ def summarise(name, y, amount, score, threshold, review_cost: float = REVIEW_COS
 
 def pr_curve(y, score):
     p, r, _ = precision_recall_curve(y, score)
-    return pd.DataFrame({"precision": p, "recall": r})
+    # scikit-learn appends a (recall=0, precision=1) point that no threshold achieves; drop it for plotting
+    return pd.DataFrame({"precision": p[:-1], "recall": r[:-1]})
